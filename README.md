@@ -1,85 +1,109 @@
 # Enterprise Network Design & Implementation
 
-### Cisco Packet Tracer | Networking Portfolio Project
+**Cisco Packet Tracer | VLANs | VLSM | DHCP | OSPF | ACLs | Network Troubleshooting**
 
 ## Project Overview
 
-This project demonstrates the design, configuration, and validation of a simulated enterprise network connecting a headquarters office with a remote branch.
+This project demonstrates the design, configuration, and verification of a simulated enterprise network connecting a headquarters office to a remote branch.
 
-The network was implemented using Cisco Packet Tracer and includes VLAN segmentation, inter-VLAN routing, DHCP, OSPF dynamic routing, and extended Access Control Lists (ACLs).
+The network was built using Cisco Packet Tracer and includes departmental VLAN segmentation, inter-VLAN routing, dynamic IPv4 addressing, OSPF routing, access control policies, and structured troubleshooting.
 
-## Network Architecture
+## Network Topology
 
-The simulated infrastructure consists of:
+![Enterprise Network Topology](screenshots/topology.png)
 
-- 2 Cisco routers (2911)
-- 2 Cisco switches (2960)
-- 7 end-user computers
-- 3 departmental VLANs
-- 1 remote office LAN
-- 1 point-to-point WAN connection
+### Network Devices
 
-## Technologies Implemented
-
-- IPv4 addressing and VLSM subnetting
-- VLAN configuration and IEEE 802.1Q trunking
-- Router-on-a-Stick inter-VLAN routing
-- DHCP server configuration
-- OSPF single-area dynamic routing
-- Extended ACLs for traffic filtering
-- Network troubleshooting and connectivity validation
+- 2 Cisco 2911 Routers (R1 and R2)
+- 2 Cisco 2960 Switches (SW1 and SW2)
+- 7 PCs
+- Headquarters with three departmental VLANs
+- Remote office connected through a routed point-to-point link
 
 ## IP Addressing Scheme
 
-| Network | Subnet | Gateway |
+| Network | Subnet | Default Gateway |
 |---|---|---|
 | Production — VLAN 30 | 192.168.10.0/26 | 192.168.10.1 |
 | Sales — VLAN 10 | 192.168.10.64/27 | 192.168.10.65 |
 | Marketing — VLAN 20 | 192.168.10.96/28 | 192.168.10.97 |
-| Remote Office | 192.168.20.0/24 | 192.168.20.1 |
-| WAN Link | 10.0.0.0/30 | R1: 10.0.0.1 / R2: 10.0.0.2 |
+| R1–R2 WAN Link | 10.0.0.0/30 | N/A |
+| Remote Office LAN | 192.168.20.0/24 | 192.168.20.1 |
 
-## Security Policy
+## Technologies Implemented
 
-An extended ACL named `SALES_POLICY` was configured to block traffic originating from the Sales VLAN and destined for the Production VLAN.
+### VLANs and 802.1Q Trunking
 
-Other permitted communication paths remain operational.
+Three VLANs were configured on SW1 to separate Sales, Marketing, and Production traffic. An IEEE 802.1Q trunk connects SW1 to R1.
 
-## Network Validation
+### Inter-VLAN Routing
 
-The following tests are included in the validation plan:
+Router-on-a-Stick was implemented on R1 using subinterfaces for each VLAN.
 
-- VLAN and trunk verification
-- DHCP address allocation
-- OSPF neighbor adjacency verification
-- Routing table verification
-- Inter-VLAN connectivity testing
-- Remote office connectivity
-- ACL traffic filtering
+### DHCP
 
-Test evidence and screenshots are provided in the repository.
+R1 provides dynamic IPv4 addresses to the headquarters workstations through separate DHCP pools.
+
+### OSPF Dynamic Routing
+
+OSPF Area 0 was configured between R1 and R2, enabling dynamic route exchange between headquarters and the remote office.
+
+### Access Control Lists
+
+An extended ACL named `SALES_POLICY` prevents Sales workstations from accessing the Production network while allowing permitted communications.
+
+## Network Verification
+
+The following tests were successfully performed:
+
+| Test | Result |
+|---|---|
+| Router interface status | Passed |
+| VLAN membership | Passed |
+| 802.1Q trunk verification | Passed |
+| DHCP address allocation | Passed |
+| OSPF neighbor adjacency | FULL |
+| OSPF routing table verification | Passed |
+| Headquarters to Remote Office connectivity | Passed |
+| Sales to Production restriction | Blocked as intended |
+| Sales to Marketing connectivity | Passed |
+| Marketing to Production connectivity | Passed |
 
 ## Troubleshooting Scenario
 
-A simulated access-port failure was introduced by administratively disabling a switch interface.
+A simulated network incident was introduced by administratively disabling SW1 interface FastEthernet0/1, disconnecting PC0 from the network.
 
-The issue was diagnosed using Cisco IOS show commands and resolved by restoring the interface configuration.
+The issue was diagnosed using Cisco IOS commands, including:
 
-## Tools
+- `show interfaces status`
+- `show running-config`
+- `ping`
 
-- Cisco Packet Tracer
-- Cisco IOS CLI
-- GitHub
-- Markdown
+The root cause was identified, the interface was restored using `no shutdown`, and connectivity was successfully revalidated.
 
-## Learning Outcomes
+## Repository Structure
 
-Through this project, I practiced designing, implementing, validating, and troubleshooting a segmented enterprise network.
+- `packet-tracer/` — Cisco Packet Tracer simulation file
+- `screenshots/` — Network topology, configurations, and test evidence
+- `documentation/` — IP addressing, validation results, and troubleshooting notes
 
-The project was developed independently as part of my technical portfolio while studying Electronic Engineering.
+## Skills Demonstrated
 
-## Project Files
+- Enterprise network design
+- IPv4 subnetting and VLSM
+- VLAN configuration and trunking
+- Inter-VLAN routing
+- DHCP configuration
+- OSPF routing
+- Extended ACL implementation
+- Network troubleshooting
+- Cisco IOS command-line configuration
+- Technical documentation
 
-The Packet Tracer topology is available in the `packet-tracer/` directory.
+## Tools Used
 
-Configuration evidence, screenshots, and technical documentation are included in their respective folders.
+Cisco Packet Tracer, Cisco IOS CLI, ICMP Ping, and Traceroute.
+
+## Project Scope
+
+This is an educational enterprise network simulation developed to demonstrate practical networking configuration, verification, and troubleshooting skills.
